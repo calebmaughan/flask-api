@@ -1,10 +1,11 @@
-from this import d
 from flask import request, jsonify
 from flask_restx import Api, Resource
 from app import models, schemas
 
+#Initialize restx
 api = Api()
 
+#Create a new user or view all users
 @api.route('/user')
 class UserRoute(Resource):
     def post(self):
@@ -20,6 +21,7 @@ class UserRoute(Resource):
         result = schemas.users_schema.dump(all_users)
         return jsonify(result)
 
+#View, update, or delete a specific user
 @api.route('/user/<user_id>')
 class SingleUserRoute(Resource):
     def get(self, user_id):
@@ -39,6 +41,7 @@ class SingleUserRoute(Resource):
         models.db.session.commit()
         return schemas.user_schema.jsonify(user)
 
+#Create a new magazine or view all magazines
 @api.route('/magazine')
 class MagazineRoute(Resource):
     def get(self):
@@ -53,6 +56,7 @@ class MagazineRoute(Resource):
         models.db.session.commit()
         return schemas.magazine_schema.jsonify(new_magazine)
 
+#View, update, or delete a specific magazine
 @api.route('/magazine/<magazine_id>')
 class SingleMagazineRoute(Resource):
     def get(self, magazine_id):
@@ -71,6 +75,7 @@ class SingleMagazineRoute(Resource):
         models.db.session.commit()
         return schemas.magazine_schema.jsonify(magazine)
 
+#Pass a list of magazine ids to subscribe to for a specific user
 @api.route('/user/<user_id>/subscribe')
 class SubscribeRoute(Resource):
     def post(self, user_id):
@@ -85,6 +90,7 @@ class SubscribeRoute(Resource):
         result = schemas.magazines_schema.dump(magazines)
         return jsonify(result)
 
+#Pass a list of magazine ids to unsubscribe from for a specific user
 @api.route('/user/<user_id>/unsubscribe')
 class UnsubscribeRoute(Resource):
     def post(self, user_id):
@@ -99,6 +105,7 @@ class UnsubscribeRoute(Resource):
         result = schemas.magazines_schema.dump(magazines)
         return jsonify(result)
 
+#View a single user's subscriptions
 @api.route('/user/<user_id>/subscriptions')
 class SubscriptionsRoute(Resource):
     def get(self, user_id):
@@ -107,6 +114,7 @@ class SubscriptionsRoute(Resource):
         result = schemas.magazines_schema.dump(magazines)
         return jsonify(result)
 
+#View a single magazine's subscribers
 @api.route('/magazine/<magazine_id>/subscribers')
 class SubscribersRoute(Resource):
     def get(self, magazine_id):
